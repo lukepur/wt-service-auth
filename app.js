@@ -1,11 +1,13 @@
 var express = require('express');
-var routes = require('./routes');
-var app = express();
-var port;
 var jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 var winston = require('winston');
 var morgan = require('morgan');
+var routes = require('./routes');
+var errorHandler = require('./middleware/general-error-handler');
+
+var app = express();
+var port;
 var loadKeys = require('./keys/load-or-generate-keys');
 
 require('dotenv').config();
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(routes);
+app.use(errorHandler);
 
 loadKeys();
 
